@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasir Angkringan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="home-nav" style="display: block;">
+    <button class="home-nav-btn" onclick="location.href='index.html'">⌂ Beranda</button>
+</nav>
+
+<section id="cashierPage" class="app-page" style="display: block;">
+    <header>
+        <h1>ꦔ꧀ꦭꦢꦺꦤꦶ ꦏꦤ꧀ꦛꦶ ꦲꦠꦶ, ꦔꦸꦤ꧀ꦝꦸꦃ ꦫꦼꦗꦼꦏꦶ</h1>
+        <p>KASIR UTAMA</p>
+    </header>
+
+    <div class="container">
+        <div class="layout">
+            <div class="menu-area">
+                <div class="card">
+                    <h2>Makanan</h2>
+                    <div class="menu-grid" id="foodMenu"></div>
+                </div>
+
+                <div class="card">
+                    <h2>Minuman</h2>
+                    <div class="menu-grid" id="drinkMenu"></div>
+                </div>
+            </div>
+
+            <div class="order-area">
+                <div class="card order-card">
+                    <h2>🛒 Pesanan</h2>
+
+                    <div id="orderList" class="order-list">
+                        <div class="empty">Belum ada pesanan</div>
+                    </div>
+
+                    <div class="total-box">
+                        <div class="total-row">
+                            <span>Total Item</span>
+                            <span id="totalItems">0</span>
+                        </div>
+                        <div class="total-row grand-total">
+                            <span>TOTAL</span>
+                            <span id="grandTotal">Rp0</span>
+                        </div>
+                    </div>
+
+                    <div class="payment">
+                        <label for="paymentInput">Uang Pembeli</label>
+                        <input type="text" inputmode="numeric" id="paymentInput" placeholder="Contoh: 20.000" oninput="calculateChange()">
+
+                        <div class="change">
+                            <span>Kembalian</span>
+                            <span class="change-value" id="change">Rp0</span>
+                        </div>
+
+                        <div class="payment-method">
+                            <label for="paymentMethod">Metode Pembayaran</label>
+                            <select id="paymentMethod">
+                                <option value="Cash">Cash</option>
+                                <option value="Dana">Dana</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+                        <button class="btn btn-clear" onclick="clearOrder()">🗑️ Hapus</button>
+                        <button class="btn btn-confirm" onclick="confirmOrder()">📌 Konfirmasi</button>
+                        <button class="btn btn-pay" onclick="finishTransaction()">💰 Bayar</button>
+                    </div>
+                </div>
+
+                <div class="card summary-card">
+                    <h2>📊 Rekap Hari Ini</h2>
+                    <div class="summary">
+                        <div class="summary-box">
+                            <div class="summary-label">Transaksi</div>
+                            <div class="summary-value" id="transactionCount">0</div>
+                        </div>
+                        <div class="summary-box">
+                            <div class="summary-label">Pendapatan</div>
+                            <div class="summary-value" id="todayIncome">Rp0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="common.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

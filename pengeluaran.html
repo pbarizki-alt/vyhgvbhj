@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengeluaran - Kasir Angkringan</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .filter-card {
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            border: 1px solid #222;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #ff0000;
+            font-size: 13px;
+        }
+
+        .filter-group input[type="date"] {
+            background: #000;
+            color: #ff0000;
+            border: 1px solid #ff0000;
+            padding: 7px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .btn-filter {
+            background: #2a2a2a;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 7px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn-filter:hover, .btn-filter.active {
+            background: #ff0000;
+            color: #fff;
+            border-color: #ff0000;
+        }
+
+        .summary-period {
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .summary-period-label {
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        .summary-period-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff8888;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="home-nav" style="display: block;">
+    <button class="home-nav-btn" onclick="location.href='index.html'">⌂ Beranda</button>
+</nav>
+
+<section id="expensePage" class="app-page" style="display: block;">
+    <header>
+        <h1>ꦔ꧀ꦭꦢꦺꦤꦶ ꦏꦤ꧀ꦛꦶ ꦲꦠꦶ</h1>
+        <p>PENCATATAN PENGELUARAN</p>
+    </header>
+
+    <div class="container">
+        <div class="layout">
+            <!-- FORM INPUT PENGELUARAN -->
+            <div class="menu-area">
+                <div class="card">
+                    <h2>📉 Tambah Pengeluaran Baru</h2>
+                    <div class="payment" style="margin-top: 20px;">
+                        <label for="expenseName">Keterangan (Contoh: Belanja Es Batu)</label>
+                        <input type="text" id="expenseName" placeholder="Masukkan keterangan pengeluaran">
+
+                        <label for="expenseAmount" style="margin-top: 15px;">Nominal Pengeluaran (Rp)</label>
+                        <input type="number" id="expenseAmount" placeholder="Contoh: 15000">
+
+                        <label for="expenseDate" style="margin-top: 15px;">Tanggal Pengeluaran</label>
+                        <input type="date" id="expenseDate">
+
+                        <button class="btn btn-confirm" style="margin-top: 20px; width: 100%; background: #ff0000; color: #000;" onclick="addExpense()">➕ Simpan Pengeluaran</button>
+                        <p style="font-size:11px; color:#666; margin-top:10px; text-align:center;">
+                            💡 Tanggal default = hari ini. Bisa diubah untuk input data lampau.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- INFO RINGKASAN HARI INI (selalu tampil) -->
+                <div class="card" style="margin-top: 15px; background: #1a1a1a;">
+                    <h2>📌 Pengeluaran Hari Ini</h2>
+                    <div style="display: flex; justify-content: space-between; margin-top: 12px;">
+                        <span style="color: #ccc; font-size: 14px;">Total</span>
+                        <span style="font-weight: bold; color: #ff8888; font-size: 20px;" id="totalExpenseToday">Rp0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIWAYAT PENGELUARAN DENGAN FILTER -->
+            <div class="order-area">
+                <div class="card order-card">
+                    <h2>📑 Riwayat Pengeluaran</h2>
+
+                    <!-- FILTER PERIODE -->
+                    <div class="filter-card" style="margin-top: 12px;">
+                        <div class="filter-group">
+                            <label>📅 Periode:</label>
+                            <input type="date" id="expenseStartDate" onchange="onExpenseDateChange()">
+                            <span style="color:#888;">s/d</span>
+                            <input type="date" id="expenseEndDate" onchange="onExpenseDateChange()">
+                        </div>
+                        <div class="filter-group" style="margin-top: 8px;">
+                            <button class="btn-filter" id="btnExpToday" onclick="filterExpenseToday()">Hari Ini</button>
+                            <button class="btn-filter" id="btnExpWeek" onclick="filterExpenseWeek()">7 Hari</button>
+                            <button class="btn-filter" id="btnExpMonth" onclick="filterExpenseMonth()">Bulan Ini</button>
+                            <button class="btn-filter" id="btnExpAll" onclick="filterExpenseAll()">Semua</button>
+                        </div>
+                    </div>
+
+                    <!-- RINGKASAN PERIODE -->
+                    <div class="summary-period">
+                        <span class="summary-period-label" id="periodLabel">Periode: Hari Ini</span>
+                        <span class="summary-period-value" id="periodTotal">Rp0</span>
+                    </div>
+
+                    <div id="expenseList" class="order-list" style="margin-top: 10px; max-height: 400px; overflow-y: auto;">
+                        <div class="empty">Belum ada pengeluaran.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="common.js"></script>
+<script src="pengeluaran.js"></script>
+</body>
+</html>

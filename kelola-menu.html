@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Menu - Kasir Angkringan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="home-nav" style="display: block;">
+    <button class="home-nav-btn" onclick="location.href='index.html'">⌂ Beranda</button>
+</nav>
+
+<section class="app-page" style="display: block;">
+    <header>
+        <h1>ꦔ꧀ꦭꦢꦺꦤꦶ ꦏꦤ꧀ꦛꦶ ꦲꦠꦶ</h1>
+        <p>KELOLA MENU & HARGA</p>
+    </header>
+
+    <div class="container">
+        <div class="layout">
+            <div class="menu-area">
+                <div class="card">
+                    <h2 id="formTitle">🍽️ Tambah Menu Baru</h2>
+                    <div class="payment" style="margin-top: 20px;">
+                        <input type="hidden" id="menuId">
+
+                        <label for="menuName">Nama Menu (Contoh: Nasi Kucing Teri)</label>
+                        <input type="text" id="menuName" placeholder="Masukkan nama menu">
+
+                        <label for="menuPrice" style="margin-top: 15px;">Harga Jual (Rp)</label>
+                        <input type="number" id="menuPrice" placeholder="Contoh: 3000">
+
+                        <label for="menuHpp" style="margin-top: 15px;">HPP / Modal (Rp) — Opsional</label>
+                        <input type="number" id="menuHpp" placeholder="Contoh: 2000 (untuk hitung laba)">
+
+                        <label for="menuCategory" style="margin-top: 15px;">Kategori</label>
+                        <select id="menuCategory" style="width: 100%; padding: 10px; margin-top: 5px; background:#1a1a1a; color:white; border:1px solid #333; border-radius:8px;">
+                            <option value="Makanan">Makanan</option>
+                            <option value="Minuman">Minuman</option>
+                            <option value="Rokok">Rokok (Bungkus)</option>
+                            <option value="Rokok Eceran">Rokok Eceran</option>
+                        </select>
+
+                        <button class="btn btn-confirm" id="btnSave" style="margin-top: 20px; width: 100%; background: #4da6ff; color: #000;" onclick="saveMenu()">➕ Simpan Menu</button>
+                        <button class="btn btn-pending" id="btnCancel" style="margin-top: 10px; width: 100%; display: none;" onclick="resetForm()">Batal Edit</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-area">
+                <div class="card order-card">
+                    <h2>📋 Daftar Menu Tersimpan</h2>
+
+                    <input type="text" id="searchMenu" class="search-box" placeholder="🔍 Cari nama menu..." oninput="renderMenuList(currentFilter)">
+
+                    <div style="margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
+                        <button class="btn" style="flex: 1; padding: 5px; font-size:12px;" onclick="renderMenuList('Semua')">Semua</button>
+                        <button class="btn" style="flex: 1; padding: 5px; font-size:12px;" onclick="renderMenuList('Makanan')">Makanan</button>
+                        <button class="btn" style="flex: 1; padding: 5px; font-size:12px;" onclick="renderMenuList('Minuman')">Minuman</button>
+                        <button class="btn" style="flex: 1; padding: 5px; font-size:12px;" onclick="renderMenuList('Rokok')">Rokok</button>
+                        <button class="btn" style="flex: 1; padding: 5px; font-size:12px;" onclick="renderMenuList('Rokok Eceran')">Rokok Eceran</button>
+                    </div>
+
+                    <button class="btn" style="width:100%; margin-top:10px; background:#8b0000; color:#fff; font-size:12px; padding:8px;" onclick="deleteAllMenus()">🗑️ Hapus Semua Menu</button>
+
+                    <div id="menuList" class="order-list" style="margin-top: 15px; max-height: 400px; overflow-y: auto;">
+                        <div class="empty">Belum ada menu.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="common.js"></script>
+<script src="kelola-menu.js"></script>
+</body>
+</html>

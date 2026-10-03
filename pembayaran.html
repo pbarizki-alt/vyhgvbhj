@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfirmasi Pembayaran - Kasir Angkringan</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+    .pending-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 15px;
+    }
+
+    .pending-card {
+        background: #1f1f1f;
+        border-radius: 10px;
+        padding: 16px;
+        border-left: 4px solid #ff0000;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .pending-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px dashed #444;
+        padding-bottom: 8px;
+        font-size: 13px;
+        color: #aaa;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .pending-items {
+        font-size: 14px;
+        color: #eee;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .pending-item-row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .pending-action-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 8px;
+        border-top: 1px dashed #333;
+    }
+
+    .btn-add-item-order {
+        background: #ff0000;
+        color: #fff;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .pending-total-row {
+        font-weight: bold;
+        font-size: 15px;
+        color: #ff0000;
+    }
+
+    .pending-payment {
+        background: #151515;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #333;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .pending-field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .pending-field label {
+        font-size: 12px;
+        color: #aaa;
+        font-weight: bold;
+    }
+
+    .pending-field input, .pending-field select {
+        width: 100%;
+        padding: 9px 12px;
+        background: #0d0d0d;
+        border: 1px solid #ff0000;
+        color: #ff0000;
+        border-radius: 6px;
+        font-size: 14px;
+        box-sizing: border-box;
+        outline: none;
+    }
+
+    .pending-field input::placeholder { color: #555; }
+
+    .pending-change-row {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 2px 0;
+    }
+
+    .pending-buttons {
+        display: flex;
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    .btn-pay-pending {
+        flex: 2;
+        background: #ff0000;
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .btn-cancel-pending {
+        flex: 1;
+        background: #2a2a2a;
+        color: #aaa;
+        border: 1px solid #444;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        padding: 15px;
+    }
+
+    .modal-content {
+        background: #1f1f1f;
+        border: 2px solid #ff0000;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+        box-shadow: 0 5px 20px rgba(255, 0, 0, 0.3);
+        color: #fff;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .modal-header h3 { margin: 0; color: #ff0000; font-size: 18px; }
+    .modal-close { background: transparent; border: none; color: #aaa; font-size: 22px; cursor: pointer; }
+
+    .modal-body label {
+        display: block;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #ccc;
+    }
+
+    .modal-body select, .modal-body input {
+        width: 100%;
+        padding: 10px;
+        background: #000;
+        border: 1px solid #444;
+        color: #fff;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .modal-footer { display: flex; gap: 10px; margin-top: 10px; }
+    .btn-modal-save { flex: 1; background: #ff0000; color: #fff; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+    .btn-modal-cancel { flex: 1; background: #1f1f1f; color: #ff0000; border: 1px solid #555; padding: 10px; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<nav class="home-nav" style="display: block;">
+    <button class="home-nav-btn" onclick="location.href='index.html'">⌂ Beranda</button>
+</nav>
+
+<section id="pembayaranPage" class="app-page" style="display: block;">
+    <header>
+        <h1>ꦔ꧀ꦭꦢꦺꦤꦶ ꦏꦤ꧀ꦛꦶ ꦲꦠꦶ, ꦔꦸꦤ꧀ꦝꦸꦃ ꦫꦼꦗꦼꦏꦶ</h1>
+        <p>KONFIRMASI PEMBAYARAN</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>💳 Konfirmasi Pembayaran</h2>
+            <div id="pendingList" class="pending-grid">
+                <div class="empty">Tidak ada pesanan yang menunggu pembayaran.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="addItemModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>➕ Tambah Pesanan</h3>
+            <button class="modal-close" onclick="closeAddItemModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label for="selectMenuItem">Pilih Menu / Produk</label>
+            <select id="selectMenuItem" onchange="onMenuItemSelect()"></select>
+
+            <label for="inputItemName">Nama Pesanan</label>
+            <input type="text" id="inputItemName" placeholder="Contoh: Es Teh">
+
+            <label for="inputItemPrice">Harga (Rp)</label>
+            <input type="number" id="inputItemPrice" placeholder="Contoh: 3000">
+
+            <label for="inputItemQty">Jumlah (Qty)</label>
+            <input type="number" id="inputItemQty" value="1" min="1">
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-save" onclick="saveItemToPendingOrder()">Tambahkan</button>
+            <button class="btn-modal-cancel" onclick="closeAddItemModal()">Batal</button>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script src="pembayaran.js"></script>
+</body>
+</html>

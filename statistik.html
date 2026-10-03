@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistik - Kasir Angkringan</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .filter-card {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #1f1f1f;
+            border-radius: 10px;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group label { font-weight: bold; color: #ff0000; }
+
+        .filter-group input[type="date"] {
+            background: #000;
+            color: #ff0000;
+            border: 1px solid #ff0000;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .btn-filter {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .btn-filter:hover, .btn-filter.active {
+            background: #ff0000;
+            color: #fff;
+            border-color: #ff0000;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #888;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-grid-main, .stats-grid-dana {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .summary-box-dana {
+            background: #1f1f1f;
+            border: 1px solid #1f1f1f;
+            border-left: 4px solid #ff0000;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .summary-box-dana .summary-label { color: #ff0000; font-size: 13px; font-weight: bold; }
+        .summary-box-dana .summary-value { margin-top: 5px; font-weight: bold; font-size: 22px; color: #ff0000; }
+
+        .history-card {
+            background: #1f1f1f;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-left: 4px solid #ff0000;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed #444;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #aaa;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .history-source {
+            background: #333;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .history-source.kasir { background: #0056b3; }
+        .history-source.rokok { background: #b35900; }
+
+        .history-items { margin-bottom: 10px; font-size: 14px; }
+        .history-item-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+
+        .history-footer {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 15px;
+            color: #ff0000;
+            border-top: 1px solid #333;
+            padding-top: 8px;
+        }
+
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-reset {
+            background: #8b0000;
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="home-nav" style="display: block;">
+    <button class="home-nav-btn" onclick="location.href='index.html'">⌂ Beranda</button>
+</nav>
+
+<section id="statisticsPage" class="app-page" style="display: block;">
+    <header>
+        <h1>ꦔ꧀ꦭꦢꦺꦤꦶ ꦏꦤ꧀ꦛꦶ ꦲꦠꦶ, ꦔꦸꦤ꧀ꦝꦸꦃ ꦫꦼꦗꦼꦏꦶ</h1>
+        <p>STATISTIK PENJUALAN</p>
+    </header>
+
+    <div class="container">
+        <div class="card filter-card">
+            <div class="filter-group">
+                <label>📅 Periode:</label>
+                <input type="date" id="filterStart" onchange="onDateInputChange()">
+                <span style="color:#888;">s/d</span>
+                <input type="date" id="filterEnd" onchange="onDateInputChange()">
+                <button class="btn-filter" id="btnToday" onclick="filterToday()">Hari Ini</button>
+                <button class="btn-filter" id="btnWeek" onclick="filterWeek()">7 Hari</button>
+                <button class="btn-filter" id="btnMonth" onclick="filterMonth()">Bulan Ini</button>
+                <button class="btn-filter" id="btnAll" onclick="filterAll()">Semua</button>
+            </div>
+        </div>
+
+        <div class="section-title">📊 Ringkasan Laba / Rugi</div>
+
+        <div class="stats-grid-main">
+            <div class="card summary-box" style="border-left: 4px solid #4da6ff;">
+                <div class="summary-label" style="color: #4da6ff;">Pendapatan Kotor (Omzet)</div>
+                <div class="summary-value" id="grandTotalIncome" style="color: #4da6ff;">Rp0</div>
+            </div>
+            <div class="card summary-box" style="border-left: 4px solid #ff4d4d;">
+                <div class="summary-label" style="color: #ff4d4d;">Total Pengeluaran</div>
+                <div class="summary-value" id="totalExpenseStat" style="color: #ff4d4d;">Rp0</div>
+            </div>
+            <div class="card summary-box" style="border-left: 4px solid #00e676; background: #0a1f10;">
+                <div class="summary-label" style="color: #00e676; font-size: 14px;">LABA BERSIH</div>
+                <div class="summary-value" id="netProfitStat" style="color: #00e676; font-size: 26px;">Rp0</div>
+            </div>
+            <div class="card summary-box">
+                <div class="summary-label">Total Transaksi Penjualan</div>
+                <div class="summary-value" id="totalTransactions">0</div>
+            </div>
+        </div>
+
+        <div class="section-title">Pembayaran DANA</div>
+        <div class="stats-grid-dana">
+            <div class="summary-box-dana">
+                <div class="summary-label">Total DANA</div>
+                <div class="summary-value" id="totalDana">Rp0</div>
+            </div>
+            <div class="summary-box-dana">
+                <div class="summary-label">DANA Kasir Utama</div>
+                <div class="summary-value" id="kasirDana">Rp0</div>
+            </div>
+            <div class="summary-box-dana">
+                <div class="summary-label">DANA Rokok</div>
+                <div class="summary-value" id="rokokDana">Rp0</div>
+            </div>
+        </div>
+
+        <!-- MENU TERLARIS -->
+        <div class="card" style="margin-bottom: 20px;">
+            <h2>🏆 Menu Terlaris (Top 5)</h2>
+            <div id="bestSellerList" style="margin-top: 10px;">
+                <div class="empty">Belum ada data penjualan.</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="action-bar">
+                <h2 id="historyTitle">📑 Riwayat Transaksi</h2>
+                <button class="btn-reset" onclick="clearAllHistory()">🗑️ Hapus Semua Riwayat</button>
+            </div>
+
+            <div id="historyList">
+                <div class="empty">Belum ada riwayat transaksi.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="common.js"></script>
+<script src="statistik.js"></script>
+</body>
+</html>

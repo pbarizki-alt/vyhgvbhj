@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beranda - Kasir Angkringan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section id="homePage" class="home-page" style="display: flex;">
+    <div class="home-overlay">
+        <h1>ꦔ꧀ꦭꦢꦺꦤꦶ ꦏꦤ꧀ꦛꦶ ꦲꦠꦶ</h1>
+        <p>Menu Utama</p>
+
+        <div class="dashboard-card">
+            <div class="dashboard-box">
+                <div class="dashboard-label">Transaksi Hari Ini</div>
+                <div class="dashboard-value" id="dashTxCount">0</div>
+            </div>
+            <div class="dashboard-box">
+                <div class="dashboard-label">Omset Hari Ini</div>
+                <div class="dashboard-value" id="dashOmset">Rp0</div>
+            </div>
+            <div class="dashboard-box">
+                <div class="dashboard-label">Pengeluaran</div>
+                <div class="dashboard-value dashboard-red" id="dashExpense">Rp0</div>
+            </div>
+            <div class="dashboard-box">
+                <div class="dashboard-label">Laba Bersih</div>
+                <div class="dashboard-value dashboard-green" id="dashProfit">Rp0</div>
+            </div>
+        </div>
+
+        <div class="home-buttons">
+            <button class="home-button" onclick="location.href='kasir.html'">
+                <span class="home-icon">🛒</span>
+                <span>Kasir</span>
+            </button>
+            <button class="home-button" onclick="location.href='rokok.html'">
+                <span class="home-icon">🚬</span>
+                <span>Rokok</span>
+            </button>
+            <button class="home-button" onclick="location.href='pembayaran.html'">
+                <span class="home-icon">💳</span>
+                <span>Pembayaran</span>
+            </button>
+            <button class="home-button" onclick="location.href='rekap.html'">
+                <span class="home-icon">📜</span>
+                <span>Rekap</span>
+            </button>
+            <button class="home-button" onclick="location.href='pengeluaran.html'">
+                <span class="home-icon">📉</span>
+                <span>Pengeluaran</span>
+            </button>
+            <button class="home-button" onclick="location.href='statistik.html'">
+                <span class="home-icon">📊</span>
+                <span>Statistik</span>
+            </button>
+            <button class="home-button" onclick="location.href='kelola-menu.html'">
+                <span class="home-icon">⚙️</span>
+                <span>Kelola Menu</span>
+            </button>
+            <button class="home-button" onclick="openBackupModal()">
+                <span class="home-icon">💾</span>
+                <span>Backup / Restore</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- MODAL BACKUP -->
+<div id="backupModal" class="modal-overlay" onclick="if(event.target===this)closeBackupModal()">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>💾 Backup / Restore Data</h3>
+            <button class="modal-close" onclick="closeBackupModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p style="color:#aaa; font-size:13px; margin:0 0 15px 0;">
+                Backup seluruh data aplikasi (menu, transaksi, pengeluaran, dll) ke file JSON.
+            </p>
+            <button class="btn-modal-save" style="width:100%; margin-bottom:15px;" onclick="exportBackup()">📤 Ekspor Backup (JSON)</button>
+
+            <label>📥 Impor Backup</label>
+            <input type="file" id="importFile" accept=".json">
+            <button class="btn-modal-cancel" style="width:100%;" onclick="importBackup()">📥 Proses Impor</button>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script src="home.js"></script>
+</body>
+</html>
